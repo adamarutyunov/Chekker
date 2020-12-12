@@ -1,0 +1,128 @@
+@font-face {
+  font-family: "PTSerif";
+  src: url("/static/fonts/PTSerifRegular.ttf");
+  font-style: normal;
+  font-weight: normal; }
+
+@font-face {
+  font-family: "PTSerif";
+  src: url("/static/fonts/PTSerifItalic.ttf");
+  font-style: italic;
+  font-weight: normal; }
+
+@font-face {
+  font-family: "PTSerif";
+  src: url("/static/fonts/PTSerifBold.ttf");
+  font-style: normal;
+  font-weight: bold; }
+
+@font-face {
+  font-family: "PTSerif";
+  src: url("/static/fonts/PTSerifBoldItalic.ttf");
+  font-style: italic;
+  font-weight: bold; }
+
+@font-face {
+  font-family: "PTSerifCaption";
+  src: url("/static/fonts/PTSerifCaptionRegular.ttf");
+  font-style: normal;
+  font-weight: normal; }
+
+@font-face {
+  font-family: "PTSerifCaption";
+  src: url("/static/fonts/PTSerifCaptionItalic.ttf");
+  font-style: italic;
+  font-weight: normal; }
+
+@font-face {
+  font-family: "GolosTextVF";
+  src: url("/static/fonts/GolosTextVF.ttf"); }
+
+* {
+  margin: 0;
+  padding: 0; }
+
+body {
+  font-family: "PTSerifCaption", serif;
+  font-size: 20pt; }
+
+header {
+  display: flex;
+  width: 95%;
+  margin: 50px 50px; }
+
+.logo {
+  display: inline-block;
+  width: 400px; }
+
+.header-links {
+  display: inline-block;
+  margin: auto 0; }
+
+.header-link {
+  display: inline-block;
+  margin-right: 20px;
+  margin-bottom: 10px; }
+
+a {
+  color: #00C4E2;
+  text-decoration: none;
+  border-bottom: 1px solid #00C4E2; }
+  a:hover {
+    color: #1AEB52;
+    border-color: #1AEB52; }
+
+space-s {
+  height: 10px; }
+
+space-m {
+  height: 30px; }
+
+space-l {
+  height: 50px; }
+
+space-xl {
+  height: 100px; }
+
+hspace-s {
+  display: inline-block;
+  width: 10px; }
+
+hspace-m {
+  display: inline-block;
+  width: 30px; }
+
+hspace-l {
+  display: inline-block;
+  width: 50px; }
+
+hspace-xl {
+  display: inline-block;
+  width: 100px; }
+
+h6, h5, h4, h3, h2, h1, .header-links {
+  font-family: "GolosTextVF", sans-serif; }
+
+h1 {
+  font-size: 72pt;
+  font-weight: bold; }
+
+h2 {
+  font-size: 54pt;
+  font-weight: bold; }
+
+h3 {
+  font-size: 36pt;
+  font-weight: bold; }
+
+h4 {
+  font-size: 24pt; }
+
+h5 {
+  font-size: 20pt; }
+
+h6 {
+  font-size: 16pt; }
+
+img {
+  width: 100%; }

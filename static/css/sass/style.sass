@@ -1,0 +1,103 @@
+@import "fonts.sass"
+
+$primary-color: #00C4E2
+$hover-color: #1AEB52
+
+*
+  margin: 0
+  padding: 0
+
+body
+  font-family: "PTSerifCaption", serif
+  font-size: 20pt
+
+header
+  display: flex
+  width: 95%
+  margin: 50px 50px
+
+.logo
+  display: inline-block
+  width: 400px
+
+.header-links
+  @extend %gt
+  display: inline-block
+  margin: auto 0
+
+.header-link
+  display: inline-block
+  margin-right: 20px
+  margin-bottom: 10px
+
+a
+  color: $primary-color
+  text-decoration: none
+  border-bottom: 1px solid $primary-color
+
+  &:hover
+    color: $hover-color
+    border-color: $hover-color
+
+space-s
+  height: 10px
+
+space-m
+  height: 30px
+
+space-l
+  height: 50px
+
+space-xl
+  height: 100px
+
+hspace-s
+  display: inline-block
+  width: 10px
+
+hspace-m
+  display: inline-block
+  width: 30px
+
+hspace-l
+  display: inline-block
+  width: 50px
+
+hspace-xl
+  display: inline-block
+  width: 100px
+
+%gt
+  font-family: "GolosTextVF", sans-serif
+
+h1
+  @extend %gt
+  font-size: 72pt
+  font-weight: bold
+
+h2
+  @extend %gt
+  font-size: 54pt
+  font-weight: bold
+
+h3
+  @extend %gt
+  font-size: 36pt
+  font-weight: bold
+
+h4
+  @extend %gt
+  font-size: 24pt
+
+h5
+  @extend %gt
+  font-size: 20pt
+
+h6
+  @extend %gt
+  font-size: 16pt
+
+img
+  width: 100%
+
+
