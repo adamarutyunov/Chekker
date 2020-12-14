@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Chekker.iml" filepath="$PROJECT_DIR$/.idea/Chekker.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Pycon/.idea/Pycon.iml" filepath="$PROJECT_DIR$/../Pycon/.idea/Pycon.iml" />
     </modules>
   </component>
 </project>

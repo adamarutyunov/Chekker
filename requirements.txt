@@ -1,0 +1,10 @@
+flask-wtf
+flask
+flask-login
+sqlalchemy
+sqlalchemy-serializer
+werkzeug
+
+flask-assets
+libsass
+slimish-jinja
