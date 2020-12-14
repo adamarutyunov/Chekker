@@ -6,6 +6,7 @@ from wtforms.widgets import TextArea
 
 
 class CreateLabourForm(FlaskForm):
+    # Форма для создания работы. Повторяет поля БД, см. models/labour.py
     title = StringField('Название', validators=[DataRequired()])
     description = StringField("Описание", widget=TextArea())
 

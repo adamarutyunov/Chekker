@@ -9,21 +9,26 @@ from data.models.user import UserToTest
 
 
 class Test(SqlAlchemyBase, SerializerMixin):
+    # Модель для вопроса
     __tablename__ = 'tests'
 
+    # ID вопроса
     id = Column(Integer, primary_key=True, autoincrement=True)
+
+    # Работа, в которой находится вопрос
     labour_id = Column(Integer, ForeignKey("labours.id"))
     labour = orm.relation("Labour")
 
+    # Условие вопроса
     statement = Column(String, nullable=False)
 
+    # Тип ответа (подробнее в lib/AnswerTypes.py)
     answer_type = Column(Integer, default=0, nullable=False)
-    # 0: Raw input
-    # 1: Single answer (radio button)
-    # 2: Multiply answers (checkbox)
 
+    # Варианты ответа
     answers = orm.relation("Answer", back_populates="test")
 
+    # Получить все правильные ответы
     def get_correct_answers(self):
         session = db_session.create_session()
 

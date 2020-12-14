@@ -37,6 +37,7 @@ login_manager.anonymous_user = ChekkerAnonymousUser
 
 
 def format_answer(answer):
+    # Форматирование строки, чтобы пробел в конце не убивал ответ
     answer = answer.strip()
     answer = answer.replace(" ", "")
     answer = answer.lower()
@@ -46,25 +47,30 @@ def format_answer(answer):
 
 @app.context_processor
 def context_processor():
+    # Передача важных переменных в шаблоны
     return dict(ANSWER_TYPES=ANSWER_TYPES, AnswerTypes=AnswerTypes)
 
 
 @app.errorhandler(403)
 def not_found(error):
+    # Контроллер для ошибки 403
     return render_template("error.html", code=403, message="Вам сюда нельзя!")
 
 
 @app.errorhandler(404)
 def not_found(error):
+    # Контроллер для ошибки 404
     return render_template("error.html", code=404, message="Такой страницы нет. Но есть много других!")
 
 
 @app.errorhandler(500)
 def not_found(error):
+    # Контроллер для ошибки 500
     return render_template("error.html", code=500, message="Проблема не в вас, проблема — в нас. Обещаем исправиться.")
 
 
 def admin_required(func):
+    # Декоратор, который пускает в страницу только администраторов. Ставится перед функцией-контроллером
     @wraps(func)
     def new_func(*args, **kwargs):
         if current_user.is_admin():
@@ -76,6 +82,7 @@ def admin_required(func):
 
 
 def teacher_required(func):
+    # Декоратор, который пускает в страницу только учителей (ну и администраторов). Ставится перед функцией-контроллером
     @wraps(func)
     def new_func(*args, **kwargs):
         if current_user.is_teacher():
@@ -88,11 +95,13 @@ def teacher_required(func):
 
 @app.route("/")
 def index():
+    # Главная страница
     return render_template("index.html", title="Chekker")
 
 
 @app.route("/labours")
 def labours():
+    # Страница всех работ
     session = db_session.create_session()
 
     labours = session.query(Labour).all()
@@ -101,6 +110,7 @@ def labours():
 
 @app.route("/labours/<int:labour_id>")
 def labour(labour_id):
+    # Страница одной работы
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -113,6 +123,7 @@ def labour(labour_id):
 @app.route("/labours/<int:labour_id>/perform", methods=["GET", "POST"])
 @login_required
 def labour_perform(labour_id):
+    # Страница выполнения работы
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -130,9 +141,11 @@ def labour_perform(labour_id):
         return render_template("labour_perform.html", title=labour.title, labour=labour)
 
     count = 0
+    # Проверка всех ответов исходя из правильных ответов в БД
     for test in labour.tests:
         user_answers = request.form
         if test.answer_type in [AnswerTypes.ManualInput().get_id(), AnswerTypes.SingleAnswer().get_id()]:
+            # Здесь проверяем, что ответ точно совпадает с правильным
             user_answers = user_answers.getlist(str(test.id))
             user_answers = list(map(format_answer, user_answers))
 
@@ -154,6 +167,7 @@ def labour_perform(labour_id):
 
             session.add(test_association)
         elif test.answer_type == AnswerTypes.MultiplyAnswer().get_id():
+            # Здесь проверяем, что отмечены все правильные ответы, а неправильные не отмечены
             user_answers = user_answers.getlist(str(test.id))
             user_answers = list(map(format_answer, user_answers))
 
@@ -170,6 +184,7 @@ def labour_perform(labour_id):
 
             session.add(test_association)
 
+    # Выставляем баллы
     labour_association = UserToLabour()
     labour_association.user = current_user
     labour_association.labour = labour
@@ -184,6 +199,7 @@ def labour_perform(labour_id):
 @app.route("/results")
 @login_required
 def results():
+    # Просмотр всех своих результатов
     session = db_session.create_session()
 
     results = session.query(UserToLabour).filter(UserToLabour.user == current_user).all()
@@ -194,6 +210,7 @@ def results():
 @app.route("/labours/<int:labour_id>/results")
 @login_required
 def labour_results(labour_id):
+    # Просмотр результатов одной работы после её окончания (ну или в любое время для учителей)
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -214,6 +231,7 @@ def labour_results(labour_id):
 @app.route("/labours/<int:labour_id>/results/all")
 @teacher_required
 def labour_results_all(labour_id):
+    # Просмотр таблицы результатов по работе для учителя (сводная статистика)
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -229,6 +247,7 @@ def labour_results_all(labour_id):
 @app.route("/labours/create", methods=["GET", "POST"])
 @teacher_required
 def labour_create():
+    # Создание работы
     session = db_session.create_session()
     form = CreateLabourForm()
 
@@ -250,6 +269,7 @@ def labour_create():
 @app.route("/labours/<int:labour_id>/edit", methods=["GET", "POST"])
 @teacher_required
 def labour_edit(labour_id):
+    # Редактирование работы
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -279,6 +299,7 @@ def labour_edit(labour_id):
 @app.route("/labours/<int:labour_id>/delete", methods=["GET"])
 @teacher_required
 def labour_delete(labour_id):
+    # Удаление работы
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -294,6 +315,7 @@ def labour_delete(labour_id):
 @app.route("/labours/<int:labour_id>/tests/create", methods=["GET", "POST"])
 @teacher_required
 def labour_create_test(labour_id):
+    # Создание вопроса в работе
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -319,6 +341,7 @@ def labour_create_test(labour_id):
 @app.route("/labours/<int:labour_id>/tests/<int:test_id>/edit", methods=["GET", "POST"])
 @teacher_required
 def labour_edit_test(labour_id, test_id):
+    # Редактирование вопроса в работе
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -352,6 +375,7 @@ def labour_edit_test(labour_id, test_id):
 @app.route("/labours/<int:labour_id>/tests/<int:test_id>/delete")
 @teacher_required
 def labour_delete_test(labour_id, test_id):
+    # Удаление вопроса в работе
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -373,6 +397,7 @@ def labour_delete_test(labour_id, test_id):
 
 @app.route("/labours/<int:labour_id>/tests/<int:test_id>/answers/create", methods=["GET", "POST"])
 def test_create_answer(labour_id, test_id):
+    # Создание ответа на вопрос
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -405,6 +430,7 @@ def test_create_answer(labour_id, test_id):
 
 @app.route("/labours/<int:labour_id>/tests/<int:test_id>/answers/<int:answer_id>/edit", methods=["GET", "POST"])
 def test_edit_answer(labour_id, test_id, answer_id):
+    # Редактирование ответа на вопрос
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -443,6 +469,7 @@ def test_edit_answer(labour_id, test_id, answer_id):
 
 @app.route("/labours/<int:labour_id>/tests/<int:test_id>/answers/<int:answer_id>/delete")
 def test_delete_answer(labour_id, test_id, answer_id):
+    # Удаление ответа на вопрос
     session = db_session.create_session()
 
     labour = session.query(Labour).get(labour_id)
@@ -471,6 +498,7 @@ def test_delete_answer(labour_id, test_id, answer_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Вход в систему
     form = LoginForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -491,24 +519,34 @@ def login():
 
 @app.route("/classes")
 def classes():
+    # Просмотр классов. Пока что не реализовано, там заглушка
     return render_template("classes.html", title="Классы")
 
 
 @app.route('/logout')
 @login_required
 def logout():
+    # Выход из системы
     logout_user()
     return redirect(request.args.get('next') or '/')
 
 
 @login_manager.user_loader
 def load_user(user_id):
+    # Системная функция для подгрузки текущего пользователя в шаблон
     session = db_session.create_session()
     return session.query(User).get(user_id)
 
 
 if __name__ == '__main__':
-    os.chdir(APP_ROOT)
+    # Перемещение в директорию проекта (нужно для лучшей стабильности)
+    try:
+        os.chdir(APP_ROOT)
+    except Exception as e:
+        pass
+
+    # Подключаемся к БД
     db_session.global_init(app.config['DATABASE_URI'])
 
+    # Запускаем приложение
     app.run(port=APP_PORT, host='0.0.0.0')

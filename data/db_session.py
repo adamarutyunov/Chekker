@@ -12,6 +12,7 @@ os.chdir(APP_ROOT)
 
 
 def global_init(db_file):
+    # Подключиться к базе данных
     global __factory
     global __scoped_session
 
@@ -35,5 +36,6 @@ def global_init(db_file):
 
 
 def create_session() -> Session:
+    # Создать сессию БД
     global __scoped_session
     return __scoped_session

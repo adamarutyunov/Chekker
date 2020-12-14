@@ -9,11 +9,6 @@ from Constants import *
 db_session.global_init(DATABASE_URI)
 session = db_session.create_session()
 
-u = User()
-u.login = "user"
-u.name = "Иван Иванов"
-u.role = 0
-u.set_password("1")
-session.add(u)
+# Файл, если нужно быстро что-то поменять в БД
 
 session.commit()
