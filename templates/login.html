@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Войти в систему
+  </h1>
+
+  <space-l></space-l>
+
+  <form action="" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+
+    <div class="form-block">
+      <h5>
+        {{ form.login.label }}
+      </h5>
+
+      <space-s></space-s>
+
+      {{ form.login(class="line-input") }}
+
+      {% for error in form.login.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="form-block">
+      <h5>
+        {{ form.password.label }}
+      </h5>
+
+      <space-s></space-s>
+
+      {{ form.password(class="line-input") }}
+
+      {% for error in form.password.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="form-block checkbox">
+      {{ form.remember_me(class="check-input") }}
+      {{ form.remember_me.label() }}
+
+      {% for error in form.remember_me.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if message %}
+      <div class="error-block">
+        <span class="alert error">
+          {{ message }}
+        </span>
+      </div>
+      <space-l></space-l>
+    {% endif %}
+
+    {{ form.submit(class="primary-button", type="submit") }}
+  </form>
+{% endblock %}

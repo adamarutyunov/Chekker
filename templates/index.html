@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Главная
+  </h1>
+  <space-l></space-l>
+  Добро пожаловать на <b>Chekker</b> — платформу для контроля знаний при помощи тестов.<br>
+
+  {% if current_user.is_authenticated %}
+    <i>{{ current_user.name }}</i>, мы вас узнали! Вы — <b>
+    {% if current_user.role == 0 %} ученик{% elif current_user.role == 1 %} учитель{% else %} администратор{% endif %}.</b>
+    <space-m></space-m>
+    <h4><a href="/labours">Перейти к работам</a></h4>
+  {% else %}
+    Мы вас не узнали. Чтобы выполнять задания, нужно <a href="/login">войти в систему</a>.
+  {% endif %}
+{% endblock %}

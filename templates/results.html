@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    {{ title }}
+  </h1>
+
+  <space-l></space-l>
+
+  {% if results %}
+    {% for result in results %}
+      {% set labour = result.labour %}
+      <span class="inactive">
+      {% if not labour.is_finished() %}
+          {{ labour.title }}
+      {% else %}
+          <a href="/labours/{{ labour.id }}/results">
+            {{ labour.title }}
+          </a>
+      {% endif %}
+      </span>
+      <sup>
+        {{ result.result }}/{{ labour.tests|length }}
+      </sup>
+    {% endfor %}
+  {% else %}
+    Вы ещё не написали ни одной работы. Но это <a href="/labours">можно исправить</a>.
+  {% endif %}
+{% endblock %}

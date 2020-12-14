@@ -5,7 +5,7 @@ from flask_login import UserMixin
 from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..db_session import SqlAlchemyBase
-from data.models.labour import Labour
+from data import db_session
 
 
 class UserToLabour(SqlAlchemyBase, SerializerMixin):
@@ -15,6 +15,17 @@ class UserToLabour(SqlAlchemyBase, SerializerMixin):
     labour_id = Column(Integer, ForeignKey('labours.id'), primary_key=True)
     labour = orm.relation('Labour', backref=orm.backref('performers', lazy='joined', cascade='all'))
     result = Column(Integer, nullable=True)
+
+
+class UserToTest(SqlAlchemyBase, SerializerMixin):
+    __tablename__ = "user_to_test"
+    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    user = orm.relation('User', backref=orm.backref('tests', lazy='joined', cascade='all'))
+    test_id = Column(Integer, ForeignKey('tests.id'), primary_key=True)
+    test = orm.relation('Test', backref=orm.backref('testers', lazy='joined', cascade='all'))
+
+    chosen_answer = Column(String, nullable=False)
+    is_correct = Column(Boolean, default=False)
 
 
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
@@ -38,6 +49,16 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     def is_admin(self):
         return self.role > 1
+
+    def get_labour_association(self, labour):
+        session = db_session.create_session()
+
+        return session.query(UserToLabour).get((self.id, labour.id))
+
+    def get_test_association(self, test):
+        session = db_session.create_session()
+
+        return session.query(UserToTest).get((self.id, test.id))
 
 
 class ChekkerAnonymousUser:
@@ -67,3 +88,9 @@ class ChekkerAnonymousUser:
 
     def is_admin(self):
         return False
+
+    def get_labour_association(self, labour):
+        return
+
+    def get_test_association(self, test):
+        return

@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link href="/static/css/style.css?{{ range(10000000000)|random }}" rel="stylesheet" type="text/css" />
+    {% assets "sass" %}
+      <script src="/static/css/sass/style.sass?{{ range(10000000000)|random }}" type="text/css"></script>
+    {% endassets %}
+
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <header>
+      <a href="/" class="implicit-a">
+        <div class="logo">
+          <img alt="Chekker" src="/static/img/logo.png" />
+        </div>
+      </a>
+      <hspace-xl></hspace-xl>
+
+      <div class="header-links">
+        {% set path = request.path %}
+        {% set links = {'/': "Главная",
+          '/labours': "Работы",
+          '/classes': "Классы",
+          '/results': "Результаты"}
+        %}
+
+        {% for key, value in links.items() %}
+          <div class='header-link'>
+            {% if path != key %} <a href='{{ key }}'>{{ value }}</a> {% else %} {{ value }} {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="flex-space"></div>
+
+      <div class="header-links" id="login-block">
+        {% if current_user.is_authenticated %}
+          <div class="header-link">
+            <b>{{ current_user.name }}</b>
+          </div><br>
+          <div class="header-link">
+            <a href="/logout?next={{ path }}">Выйти</a>
+          </div>
+        {% else %}
+          <div class="header-link">
+            <a href="/login?next={{ path }}">Войти</a>
+          </div>
+        {% endif %}
+      </div>
+    </header>
+    <div id="main">
+      {% block content %}{% endblock %}
+    </div>
+    <footer></footer>
+  </body>
+</html>

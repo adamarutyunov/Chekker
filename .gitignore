@@ -6,8 +6,20 @@ __pycache__/
 # C extensions
 *.so
 
+# PyCharm
+.idea/
+
+# Config
+/Constants.py
+
+# Database shell
+/SQLAlchemyShell.py
+
 # Database
 *.db
+
+# Temporary files
+/temp/
 
 # Distribution / packaging
 .Python

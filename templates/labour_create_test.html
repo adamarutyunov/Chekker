@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    {{ title }}
+  </h1>
+
+  <space-l></space-l>
+
+  <form action="" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+
+    <div class="form-block">
+      <h5>
+        {{ form.statement.label }}
+      </h5>
+
+      <space-s></space-s>
+
+      {{ form.statement() }}
+
+      {% for error in form.statement.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="form-block">
+      <h5>
+        {{ form.answer_type.label }}
+      </h5>
+
+      <space-s></space-s>
+
+      {{ form.answer_type() }}
+
+      {% for error in form.answer_type.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    {{ form.submit(class="primary-button", type="submit") }}
+  </form>
+{% endblock %}

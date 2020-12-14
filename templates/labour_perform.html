@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    {{ labour.title }}
+  </h1>
+
+  <form method="post" action="">
+    {% for test in labour.tests %}
+      <space-l></space-l>
+      <h5 id="q{{ test.id }}">Вопрос №{{ loop.index }}</h5>
+      <space-s></space-s>
+      <span class="small-label">Условие</span>
+      <span class="half-block">{{ test.statement|replace("\n", "<br>")|safe }}</span>
+
+      {% if test.answer_type == 0 %}
+        <div>
+          <input class="line-input" name="{{ test.id }}" type="text">
+        </div>
+      {% elif test.answer_type == 1 %}
+        <space-m></space-m>
+        {% for answer in test.answers %}
+          <div class="radio">
+            <input name="{{ test.id }}" value="{{ answer.data }}" id="{{ test.id }}{{ answer.data }}{{ loop.index }}" type="radio" />
+            <label for="{{ test.id }}{{ answer.data }}{{ loop.index }}"><span>{{ answer.data }}</span></label>
+          </div>
+          <space-xs></space-xs>
+        {% endfor %}
+      {% elif test.answer_type == 2 %}
+        <space-m></space-m>
+        {% for answer in test.answers %}
+          <div class="checkbox">
+            <input name="{{ test.id }}" value="{{ answer.data }}" id="{{ test.id }}{{ answer.data }}{{ loop.index }}" type="checkbox" />
+            <label for="{{ test.id }}{{ answer.data }}{{ loop.index }}"><span>{{ answer.data }}</span></label>
+          </div>
+          <space-xs></space-xs>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+
+    <space-l></space-l>
+    <input type="submit" class="primary-button" value="Отправить">
+  </form>
+{% endblock %}

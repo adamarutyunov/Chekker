@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Результаты <a href="/labours/{{ labour.id }}">работы</a>
+  </h1>
+
+  <space-l></space-l>
+
+  Результат: <b>{{ labour_association.result }}/{{ labour.tests|length }}</b>
+
+  <space-m></space-m>
+
+  {% for test in labour.tests %}
+    {% set test_association = current_user.get_test_association(test) %}
+    <space-l></space-l>
+    {% if test_association and test_association.is_correct%} <h5 class="good">
+    {% elif test_association and not test_association.is_correct%} <h5 class="error">
+    {% else %} <h5> {% endif %}
+      Вопрос №{{ loop.index }}
+    </h5>
+    <space-s></space-s>
+    <span class="small-label">Условие</span>
+    <span class="half-block">{{ test.statement|replace("\n", "<br>")|safe }}</span>
+    <space-s></space-s>
+
+
+    <span class="small-label">Выбранный ответ</span>
+
+    <span class="half-block"><b>
+
+      {% if test_association %}
+        {{ test_association.chosen_answer }}
+      {% else %}
+        нет
+      {% endif %}
+    </b></span>
+
+    <space-s></space-s>
+
+    <span class="small-label">Правильный ответ</span>
+    {% if test.answers %}
+      <ul>
+      {% for answer in test.answers %}
+        {% if answer.is_correct %} <li class="good"> {% else %} <li> {% endif %}
+          {{ answer.data }}
+        </li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      нет
+    {% endif %}
+  {% endfor %}
+{% endblock %}

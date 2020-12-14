@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Результаты <a href="/labours/{{ labour.id }}">работы</a>
+  </h1>
+
+  <space-m></space-m>
+
+  {% if results %}
+    <table>
+      <tr>
+        <th class="max-td">
+          Имя
+        </th>
+        <th class="min-td">
+          =
+        </th>
+        {% for test in labour.tests %}
+          <th class="min-td">
+            {{ loop.index }}
+          </th>
+        {% endfor %}
+      </tr>
+      {% for result in results %}
+        <tr>
+          <td>
+            {{ result.user.name }}
+          </td>
+          <td>
+            <b>
+              {{ result.result }}
+            </b>
+          </td>
+          {% for test in labour.tests %}
+            {% set test_association = result.user.get_test_association(test) %}
+            <th class="min-td">
+              {% if test_association %}
+                {% if test_association.is_correct %}
+                  <span class="good">+</span>
+                {% else %}
+                  <span class="error">—</span>
+                {% endif %}
+              {% endif %}
+            </th>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    Никто ещё не написал эту работу :(
+  {% endif %}
+{% endblock %}

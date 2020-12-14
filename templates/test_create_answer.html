@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    {{ title }}
+  </h1>
+
+  <space-l></space-l>
+
+  <form action="" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+
+    <div class="form-block">
+      <h5>
+        {{ form.data.label }}
+      </h5>
+
+      <space-s></space-s>
+
+      {{ form.data(class="line-input") }}
+
+      {% for error in form.data.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="form-block checkbox">
+      {{ form.is_correct(class="check-input") }}
+      {{ form.is_correct.label() }}
+
+      {% for error in form.is_correct.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    {{ form.submit(class="primary-button", type="submit") }}
+  </form>
+{% endblock %}

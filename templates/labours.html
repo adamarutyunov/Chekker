@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Работы
+  </h1>
+
+  <space-m></space-m>
+
+  {% if labours %}
+    <table>
+      <tr>
+        <th class="min-td">
+          #
+        </th>
+        <th class="max-td">
+          Название
+        </th>
+        <th class="min-td">
+          Начало
+        </th>
+        <th class="min-td">
+          Конец
+        </th>
+      </tr>
+      {% for labour in labours %}
+        <tr>
+          <td>
+            {{ labour.id }}
+          </td>
+          <td>
+            <a href="/labours/{{ labour.id }}">
+              {{ labour.title }}
+            </a>
+          </td>
+          <td>
+            {{ labour.start_date.strftime("%d.%m.%Y %H:%M") }}
+          </td>
+          <td>
+            {{ labour.end_date.strftime("%d.%m.%Y %H:%M") }}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    Пока что работ нет :(
+  {% endif %}
+
+  <space-m></space-m>
+
+  {% if current_user.is_teacher() %}
+    <a href="/labours/create">
+      Создать работу
+    </a>
+  {% endif %}
+{% endblock %}

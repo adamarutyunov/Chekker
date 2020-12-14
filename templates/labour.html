@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    {{ labour.title }}
+  </h1>
+
+  <space-l></space-l>
+
+  <span class="small-label">Описание</span>
+  <span class="half-block">
+    {{ labour.description|replace("\n", "<br>")|safe }}
+  </span>
+
+  <space-l></space-l>
+
+  <span class="small-label">Время</span>
+  <span class="half-block">
+    {% if current_user.get_labour_association(labour) %}
+      Вы написали эту работу.
+      {% if labour.is_finished() or current_user.is_teacher() %}
+        <a href="/labours/{{ labour.id }}/results">Посмотреть результаты</a>
+      {% else %}
+        Результаты будут доступны после её окончания.
+      {% endif %}
+    {% else %}
+      {% if labour.is_finished() %}
+        Эта работа уже закончилась.
+      {% elif not labour.is_started() %}
+        Эта работа начнётся <b>{{ labour.start_date.strftime("%d.%m.%Y в %H:%M") }}.</b>
+      {% else %}
+        <space-s></space-s>
+        <a href="/labours/{{ labour.id }}/perform" class="primary-button">Выполнить работу</a>
+        <space-s></space-s>
+      {% endif %}
+    {% endif %}
+  </span>
+
+  {% if current_user.is_teacher() %}
+    <space-l></space-l>
+
+    <div class="link-list">
+      <a href="/labours/{{ labour.id }}/results/all">
+        Все результаты
+      </a>
+      <br>
+      <a href="/labours/{{ labour.id }}/tests/create">
+        Добавить вопрос
+      </a>
+      <br>
+      <a href="/labours/{{ labour.id }}/edit">
+        Редактировать работу
+      </a>
+      <br>
+      <a href="/labours/{{ labour.id }}/delete">
+        Удалить работу
+      </a>
+    </div>
+
+
+    {% if labour.tests %}
+      <space-l></space-l>
+      <h3 id="question-block">Вопросы</h3>
+      {% for test in labour.tests %}
+        <space-l></space-l>
+        <h5 id="q{{ test.id }}">Вопрос №{{ loop.index }}
+          <a href="/labours/{{ labour.id }}/tests/{{ test.id }}/delete" class="implicit-a error">
+            ×
+          </a>
+        </h5>
+        <space-s></space-s>
+        <span class="small-label">Условие</span>
+        <span class="half-block">{{ test.statement|replace("\n", "<br>")|safe }}</span>
+        <space-s></space-s>
+
+        <span class="small-label">Формат ответа</span>
+        <b><span class="half-block">{{ ANSWER_TYPES[test.answer_type].get_description() }}</span></b>
+        <space-s></space-s>
+
+        {% if test.answers %}
+          <span class="small-label">Варианты ответа</span>
+          <ul>
+          {% for answer in test.answers %}
+            {% if answer.is_correct %} <li class="good"> {% else %} <li> {% endif %}
+              {{ answer.data }}
+              <a href="/labours/{{ labour.id }}/tests/{{ test.id }}/answers/{{ answer.id }}/delete" class="implicit-a error">
+                ×
+              </a>
+            </li>
+          {% endfor %}
+          </ul>
+          <space-s></space-s>
+        {% endif %}
+        <a href="/labours/{{ labour.id }}/tests/{{ test.id }}/answers/create" class="small-text">Добавить ответ</a>
+        <hspace-s></hspace-s>
+        <a href="/labours/{{ labour.id }}/tests/{{ test.id }}/edit" class="small-text">Редактировать вопрос</a>
+      {% endfor %}
+      <space-l></space-l>
+      <a href="/labours/{{ labour.id }}/tests/create">
+          Добавить вопрос
+      </a>
+    {% endif %}
+  {% endif %}
+{% endblock %}

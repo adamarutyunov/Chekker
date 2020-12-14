@@ -18,3 +18,12 @@ class Labour(SqlAlchemyBase, SerializerMixin):
 
     start_date = Column(DateTime, default=datetime.datetime.now)
     end_date = Column(DateTime, default=datetime.datetime.now)
+
+    def is_started(self):
+        return datetime.datetime.now() >= self.start_date
+
+    def is_finished(self):
+        return datetime.datetime.now() >= self.end_date
+
+    def is_active(self):
+        return self.is_started() and not self.is_finished()

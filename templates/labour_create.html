@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Создать работу
+  </h1>
+
+  <space-l></space-l>
+
+  <form action="" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+
+    <div class="form-block">
+      <h5>
+        {{ form.title.label }}
+      </h5>
+
+      <space-s></space-s>
+
+      {{ form.title(class="line-input") }}
+
+      {% for error in form.title.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="form-block">
+      <h5>
+        {{ form.description.label }}
+      </h5>
+
+      <space-s></space-s>
+
+      {{ form.description() }}
+
+      {% for error in form.description.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="form-block">
+      <h5>
+        {{ form.start_date.label }}
+      </h5>
+
+      <space-s></space-s>
+
+      {{ form.start_date(class="date-input") }}
+
+      {% for error in form.start_date.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="form-block">
+      <h5>
+        {{ form.end_date.label }}
+      </h5>
+
+      <space-s></space-s>
+
+      {{ form.end_date(class="date-input") }}
+
+      {% for error in form.end_date.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    {{ form.submit(class="primary-button", type="submit") }}
+  </form>
+{% endblock %}
