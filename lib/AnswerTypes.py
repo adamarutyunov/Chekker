@@ -1,5 +1,5 @@
 class AnswerType:
-    # Абстрактный типа ответа
+    # Абстрактный тип ответа
     def __init__(self, id, description):
         self.id = id
         self.description = description
@@ -27,6 +27,7 @@ class MultiplyAnswer(AnswerType):
     # Выбор нескольких ответов
     def __init__(self):
         super().__init__(2, "Выбор нескольких ответов")
+
 
 # Список нужен для удобного обращения к типу по его ID. Enum в этом случае не так удобно использовать
 ANSWER_TYPES = [ManualInput(), SingleAnswer(), MultiplyAnswer()]

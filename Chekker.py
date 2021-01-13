@@ -8,14 +8,19 @@ from data.models.user import *
 from data.models.labour import *
 from data.models.test import *
 from data.models.answer import *
+from data.models.attachment import *
 from forms.create_labour import *
 from forms.labour_create_test import *
 from forms.test_create_answer import *
+from forms.test_upload_attachment import *
 from forms.login import *
 from lib import AnswerTypes
 from lib.AnswerTypes import *
+from lib import AttachmentTypes
 from Constants import *
 from functools import wraps
+from werkzeug.utils import secure_filename
+from uuid import uuid4
 
 app = Flask(__name__)
 
@@ -48,7 +53,8 @@ def format_answer(answer):
 @app.context_processor
 def context_processor():
     # Передача важных переменных в шаблоны
-    return dict(ANSWER_TYPES=ANSWER_TYPES, AnswerTypes=AnswerTypes)
+    return dict(ANSWER_TYPES=ANSWER_TYPES, AnswerTypes=AnswerTypes,
+                ATTACHMENT_TYPES=AttachmentTypes.ATTACHMENT_TYPES, AttachmentTypes=AttachmentTypes)
 
 
 @app.errorhandler(403)
@@ -104,7 +110,7 @@ def labours():
     # Страница всех работ
     session = db_session.create_session()
 
-    labours = session.query(Labour).all()
+    labours = session.query(Labour).order_by(Labour.id.desc()).all()
     return render_template("labours.html", title="Работы", labours=labours)
 
 
@@ -393,6 +399,78 @@ def labour_delete_test(labour_id, test_id):
     session.commit()
 
     return redirect(f"/labours/{labour.id}#question-block")
+
+
+@app.route("/labours/<int:labour_id>/tests/<int:test_id>/attachments/upload", methods=["GET", "POST"])
+@teacher_required
+def test_upload_attachment(labour_id, test_id):
+    # Загрузка вложения к вопросу
+    session = db_session.create_session()
+
+    labour = session.query(Labour).get(labour_id)
+    if not labour:
+        abort(404)
+
+    test = session.query(Test).get(test_id)
+    if not test:
+        abort(404)
+
+    if test.labour != labour:
+        abort(404)
+
+    form = TestUploadAttachmentForm()
+
+    if form.validate_on_submit():
+        file = form.image.data
+        filename = secure_filename(str(uuid4()) + "." + file.filename.split(".")[-1])
+
+        short_folder = "static/attachments"
+        short_path = os.path.join(short_folder, filename)
+
+        path = os.path.join(APP_ROOT, short_path)
+        file.save(path)
+
+        attachment = Attachment()
+        attachment.test = test
+        attachment.type = AttachmentTypes.ImageAttachment().get_id()
+        attachment.link = short_path
+
+        session.add(attachment)
+        session.commit()
+
+        return redirect(f"/labours/{labour.id}#q{test.id}")
+
+    return render_template("test_upload_attachment.html", title="Загрузить вложение", form=form)
+
+
+@app.route("/labours/<int:labour_id>/tests/<int:test_id>/attachments/<int:attachment_id>/delete", methods=["GET", "POST"])
+@teacher_required
+def test_delete_attachment(labour_id, test_id, attachment_id):
+    # Удаление вложения
+    session = db_session.create_session()
+
+    labour = session.query(Labour).get(labour_id)
+    if not labour:
+        abort(404)
+
+    test = session.query(Test).get(test_id)
+    if not test or test.labour != labour:
+        abort(404)
+
+    attachment = session.query(Attachment).get(attachment_id)
+    if not attachment or attachment.test != test:
+        abort(404)
+
+    try:
+        os.remove(attachment.link)
+    except Exception as e:
+        pass
+    finally:
+        session.delete(attachment)
+
+    session.commit()
+
+    return redirect(f"/labours/{labour.id}#q{test.id}")
 
 
 @app.route("/labours/<int:labour_id>/tests/<int:test_id>/answers/create", methods=["GET", "POST"])

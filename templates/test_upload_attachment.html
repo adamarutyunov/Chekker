@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    {{ title }}
+  </h1>
+
+  <space-l></space-l>
+
+  <form action="" method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+
+    <div class="form-block">
+
+      <div class="file">
+        {{ form.image(id="input-file", onchange="this.form.submit()") }}
+        <label for="input-file">
+          <a class="primary-button">Выбрать файл</a>
+        </label>
+      </div>
+
+      <space-m></space-m>
+
+      {% for error in form.image.errors %}
+        <div class="error-block">
+          <span class="alert error">
+            {{ error }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+  </form>
+{% endblock %}

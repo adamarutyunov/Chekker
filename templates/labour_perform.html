@@ -11,7 +11,16 @@
       <h5 id="q{{ test.id }}">Вопрос №{{ loop.index }}</h5>
       <space-s></space-s>
       <span class="small-label">Условие</span>
-      <span class="half-block">{{ test.statement|replace("\n", "<br>")|safe }}</span>
+      <span class="half-block">
+        {{ test.statement|replace("\n", "<br>")|safe }}
+
+        {% for attachment in test.attachments %}
+          <space-s></space-s>
+          {% if attachment.type == AttachmentTypes.ImageAttachment().get_id() %}
+            <img src="{{ "/" + attachment.link }}" />
+          {% endif %}
+        {% endfor %}
+      </span>
 
       {% if test.answer_type == 0 %}
         <div>

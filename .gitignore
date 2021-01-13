@@ -21,6 +21,9 @@ __pycache__/
 # Temporary files
 /temp/
 
+# Storage
+/static/attachments/*
+
 # Distribution / packaging
 .Python
 build/

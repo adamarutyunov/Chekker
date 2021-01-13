@@ -151,7 +151,8 @@ h6 {
   font-variation-settings: "wght" 400; }
 
 img {
-  width: 100%; }
+  width: 100%;
+  border-radius: 20px; }
 
 table {
   max-width: 70%;
@@ -201,6 +202,9 @@ input[type=checkbox] {
 input[type=radio] {
   display: none; }
 
+input[type=file] {
+  display: none; }
+
 .checkbox label:before {
   content: "";
   display: inline-block;
@@ -229,6 +233,9 @@ input[type=radio] {
   line-height: 14pt;
   font-weight: bold; }
 
+.file label {
+  cursor: pointer; }
+
 input[type=checkbox]:checked + label:before {
   content: "\2713"; }
 
@@ -241,7 +248,8 @@ input[type=radio]:checked + label:before {
   color: white;
   background-color: #00C4E2;
   border-radius: 10px;
-  font-size: 25pt; }
+  font-size: 25pt;
+  white-space: nowrap; }
   .primary-button:hover {
     background-color: #11D5F3; }
 

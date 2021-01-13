@@ -70,8 +70,24 @@
         </h5>
         <space-s></space-s>
         <span class="small-label">Условие</span>
-        <span class="half-block">{{ test.statement|replace("\n", "<br>")|safe }}</span>
-        <space-s></space-s>
+        <span class="half-block">
+          {{ test.statement|replace("\n", "<br>")|safe }}
+
+          {% for attachment in test.attachments %}
+            <space-s></space-s>
+            {% if attachment.type == AttachmentTypes.ImageAttachment().get_id() %}
+              <img src="{{ "/" + attachment.link }}" />
+            {% endif %}
+            <space-xs></space-xs>
+            <a class="small-label implicit-a"
+                    href="/labours/{{ labour.id }}/tests/{{ test.id }}/attachments/{{ attachment.id }}/delete">
+              Удалить
+            </a>
+            <space-s></space-s>
+          {% endfor %}
+        </span>
+
+        <space-m></space-m>
 
         <span class="small-label">Формат ответа</span>
         <b><span class="half-block">{{ ANSWER_TYPES[test.answer_type].get_description() }}</span></b>
@@ -94,6 +110,8 @@
         <a href="/labours/{{ labour.id }}/tests/{{ test.id }}/answers/create" class="small-text">Добавить ответ</a>
         <hspace-s></hspace-s>
         <a href="/labours/{{ labour.id }}/tests/{{ test.id }}/edit" class="small-text">Редактировать вопрос</a>
+        <hspace-s></hspace-s>
+        <a href="/labours/{{ labour.id }}/tests/{{ test.id }}/attachments/upload" class="small-text">Загрузить вложение</a>
       {% endfor %}
       <space-l></space-l>
       <a href="/labours/{{ labour.id }}/tests/create">

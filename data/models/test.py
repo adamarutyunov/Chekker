@@ -28,6 +28,9 @@ class Test(SqlAlchemyBase, SerializerMixin):
     # Варианты ответа
     answers = orm.relation("Answer", back_populates="test")
 
+    # Вложения
+    attachments = orm.relation("Attachment", back_populates="test")
+
     # Получить все правильные ответы
     def get_correct_answers(self):
         session = db_session.create_session()
