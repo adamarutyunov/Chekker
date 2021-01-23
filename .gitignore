@@ -10,7 +10,7 @@ __pycache__/
 .idea/
 
 # Config
-/Constants.py
+Constants.py
 
 # Database shell
 /SQLAlchemyShell.py
