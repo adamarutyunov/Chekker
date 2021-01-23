@@ -8,9 +8,22 @@ def fill(string, n):
         string = choice(alphabet).upper() + string
 
     return string
-        
 
-def encode_login(school: int, form: int, littera: str, number: int) -> str:
+
+def generate_password(n=8):
+    out = ""
+    for i in range(n):
+        char = choice(alphabet)
+        
+        if randint(0, 1) == 1:
+            char = char.upper()
+
+        out += char
+
+    return out
+
+
+def generate_login(school: int, form: int, littera: str, number: int) -> str:
     school = school % 10000
     form = form % 100
     littera = littera[0].lower()
