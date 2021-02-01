@@ -616,15 +616,15 @@ def load_user(user_id):
     return session.query(User).get(user_id)
 
 
+# Перемещение в директорию проекта (нужно для лучшей стабильности)
+try:
+    os.chdir(APP_ROOT)
+except Exception as e:
+    pass
+
+# Подключаемся к БД
+db_session.global_init(app.config['DATABASE_URI'])
+
+# Запускаем приложение
 if __name__ == '__main__':
-    # Перемещение в директорию проекта (нужно для лучшей стабильности)
-    try:
-        os.chdir(APP_ROOT)
-    except Exception as e:
-        pass
-
-    # Подключаемся к БД
-    db_session.global_init(app.config['DATABASE_URI'])
-
-    # Запускаем приложение
-    app.run(port=APP_PORT, host='0.0.0.0')
+    app.run(host='0.0.0.0', port=APP_PORT)
