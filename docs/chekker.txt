@@ -1,0 +1,33 @@
+abcdefghijklmnopqrstuvwxyz
+01234567890123456789012345
+
+Raw login:
+1234 56 7 89 012
+SSSS CC L NN XXX where
+SSSS — school number. Shift to right, unused space generates R
+CC — class number. Shift to right, unused space generates R
+L — class littera
+NN — student number in class. Shift to right, unused space generates R
+XXX — three true random symbols
+R — random capital symbol
+ 
+
+Encryption rules:
+(1) = [1 + 9]
+(2) = [2 + 9]
+(3) = [3 + 9]
+(4) = [4 + 9]
+(5, 6) = map [] (56 + 9)
+(7) = [-7]
+(8) = [8]
+(9) = [9]
+
+So, student of lyceum number 56, class 11 A, number 3 codes as
+Decrypted: RR56 11 a R3 XXX
+Encrypted: RRij be z Rd XXX
+Generated: OSijbezWdnFi
+
+Teacher, lyceum number 56, name E, number 01 as
+Decrypted: RR56 00 e R1 XXX
+Encrypted: RRgh ab v Rb XXX
+Generated: VBghabvTbOlQ
